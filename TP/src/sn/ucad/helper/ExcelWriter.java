@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,10 +19,25 @@ import java.util.List;
 
 public class ExcelWriter {
 
-    private static final String OUTPUT_FILE = "../Resultats/tp_cloudsim.xlsx";
+	private static final String OUTPUT_FOLDER ="../Resultats/";
+    private static final String OUTPUT_FILE = "tp_cloudsim.xlsx";
 	private static final String TEMPLATE_XLS_FILE_PATH = "./templates/table_and_graphe.xlsx";
 	private static String[] columns = {"Nombre de VMs", "Charge Fixe", "Charge Aleatoire"};
+	static {
+		Path path = Paths.get(OUTPUT_FOLDER);
 
+		if (Files.exists(path)) {
+		  System.out.println("Exist");
+		}else {
+			System.out.println("Not Exist"); 
+			try {
+				Files.createDirectory(path);
+			} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		}
+	}
     public static void generateExcelFile(double fixe[],double aleatoire[]) throws IOException, InvalidFormatException {
 		DecimalFormat dft = new DecimalFormat("###.##");
     	List<TableRow> tablesRows =  new ArrayList<>();
@@ -82,12 +100,12 @@ public class ExcelWriter {
         }
 
         // Write the output to a file
-        FileOutputStream fileOut = new FileOutputStream(OUTPUT_FILE);
+        FileOutputStream fileOut = new FileOutputStream(OUTPUT_FOLDER+OUTPUT_FILE);
         workbook.write(fileOut);
         fileOut.close();
 
         workbook.close();
-        System.out.println("Fichier excel "+OUTPUT_FILE+" généré avec succès...");
+        System.out.println("Fichier excel "+OUTPUT_FOLDER+OUTPUT_FILE+" généré avec succès...");
     }
 
     public static void generateExcelFileUsingTemplate(double fixe[],double aleatoire[]) throws IOException, InvalidFormatException {
@@ -128,12 +146,12 @@ public class ExcelWriter {
         }
 
         // Write the output to a file
-        FileOutputStream fileOut = new FileOutputStream(OUTPUT_FILE);
+        FileOutputStream fileOut = new FileOutputStream(OUTPUT_FOLDER+OUTPUT_FILE);
         workbook.write(fileOut);
         fileOut.close();
 
         workbook.close();
-        System.out.println("Fichier excel "+OUTPUT_FILE+" généré avec succès...");
+        System.out.println("Fichier excel "+OUTPUT_FOLDER+OUTPUT_FILE+" généré avec succès...");
     }
 }
 
